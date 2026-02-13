@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine Surprise</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial, sans-serif;
+background:linear-gradient(#ffd6e7,#fff);
+overflow:hidden;
+text-align:center;
+}
+
+.screen{
+position:absolute;
+width:100%;
+height:100%;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+transition:1s;
+}
+
+.hidden{opacity:0; pointer-events:none;}
+
+button{
+padding:15px 25px;
+font-size:18px;
+border:none;
+border-radius:30px;
+background:#ff4d88;
+color:white;
+cursor:pointer;
+}
+
+#box{
+width:120px;
+height:120px;
+background:#ff4d88;
+position:relative;
+border-radius:15px;
+cursor:pointer;
+}
+
+#lid{
+position:absolute;
+top:-40px;
+width:120px;
+height:40px;
+background:#ff1a66;
+border-radius:15px 15px 0 0;
+transition:0.6s;
+}
+
+.open #lid{
+transform:translateY(-60px) rotate(-20deg);
+}
+
+.message{
+font-size:20px;
+color:#cc0066;
+margin:20px;
+opacity:0;
+transition:1s;
+}
+
+#name{
+font-size:60px;
+color:#ff0066;
+font-weight:bold;
+animation:beat 1s infinite;
+display:none;
+}
+
+@keyframes beat{
+0%,100%{transform:scale(1);}
+50%{transform:scale(1.2);}
+}
+
+#finalText{
+width:80%;
+font-size:20px;
+color:#cc0066;
+display:none;
+}
+
+.heart{
+position:absolute;
+color:#ff4d88;
+font-size:20px;
+animation:float 6s linear infinite;
+}
+
+@keyframes float{
+from{transform:translateY(100vh);}
+to{transform:translateY(-10vh);}
+}
+</style>
+</head>
+
+<body>
+
+<!-- START SCREEN -->
+<div id="start" class="screen">
+<h2>Someone has a Valentine surprise for you</h2>
+<button onclick="showBox()">Tap to Continue</button>
+</div>
+
+<!-- BOX SCREEN -->
+<div id="boxScreen" class="screen hidden">
+<h2>Tap the box to open your surprise</h2>
+<div id="box" onclick="openBox()">
+<div id="lid"></div>
+</div>
+<div id="msg" class="message"></div>
+</div>
+
+<!-- NAME SCREEN -->
+<div id="nameScreen" class="screen hidden">
+<div id="name">ZAINY</div>
+<button onclick="showFinal()">Tap to read one last thing</button>
+</div>
+
+<!-- FINAL MESSAGE -->
+<div id="finalScreen" class="screen hidden">
+<div id="finalText"></div>
+</div>
+
+<script>
+const messages=[
+"This little surprise is for someone very special to me.",
+"Someone I always enjoy talking to.",
+"Someone who makes even normal days feel better.",
+"Someone whose smile really matters.",
+"Someone who slowly became important without even trying.",
+"Someone I feel comfortable and peaceful with.",
+"Someone I always wish to see happy.",
+"And that someone is..."
+];
+
+let i=0;
+
+function showBox(){
+document.getElementById("start").classList.add("hidden");
+document.getElementById("boxScreen").classList.remove("hidden");
+}
+
+function openBox(){
+document.getElementById("box").classList.add("open");
+showMessage();
+}
+
+function showMessage(){
+if(i<messages.length){
+let msg=document.getElementById("msg");
+msg.style.opacity=0;
+setTimeout(()=>{
+msg.innerText=messages[i];
+msg.style.opacity=1;
+i++;
+setTimeout(showMessage,2000);
+},500);
+}
+else{
+setTimeout(()=>{
+document.getElementById("boxScreen").classList.add("hidden");
+document.getElementById("nameScreen").classList.remove("hidden");
+document.getElementById("name").style.display="block";
+},1500);
+}
+}
+
+function showFinal(){
+document.getElementById("nameScreen").classList.add("hidden");
+document.getElementById("finalScreen").classList.remove("hidden");
+
+let text=`I just wanted to tell you something simple but true.
+You are really a very special person to me.
+Talking to you makes me feel relaxed and happy at the same time.
+Even small conversations with you can change my mood in a good way.
+
+You may not realize it, but you have a very soft and nice place in my heart.
+I truly respect you, care about you, and always wish the best for you.
+
+I don’t know what the future holds, but one thing I know is that
+I will always want to see you smiling, peaceful, and happy.
+
+This little game is just a small way to show
+how important you are to me. ♥`;
+
+typeWriter(text);
+}
+
+function typeWriter(text){
+let i=0;
+let box=document.getElementById("finalText");
+box.style.display="block";
+
+function typing(){
+if(i<text.length){
+box.innerHTML+=text.charAt(i);
+i++;
+setTimeout(typing,35);
+}
+}
+typing();
+}
+
+// floating hearts
+setInterval(()=>{
+let heart=document.createElement("div");
+heart.className="heart";
+heart.innerHTML="♥";
+heart.style.left=Math.random()*100+"vw";
+heart.style.fontSize=(20+Math.random()*20)+"px";
+document.body.appendChild(heart);
+setTimeout(()=>heart.remove(),6000);
+},400);
+</script>
+
+</body>
+</html>
